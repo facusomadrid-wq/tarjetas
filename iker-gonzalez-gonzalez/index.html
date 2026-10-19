@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; manifest-src 'self'; connect-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f3f4f6">
+<title>Iker González González · FAC-USO Madrid</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="../recursos/icono-192.png">
+<link rel="apple-touch-icon" href="../recursos/icono-192.png">
+<link rel="stylesheet" href="../recursos/tarjeta.css">
+<script src="../recursos/tarjeta.js" defer></script>
+</head>
+<body>
+<div class="recuadro">
+<header class="cabecera">
+  <img class="logo" src="../recursos/logo-color.png" alt="FAC-USO Madrid · Federación de Atención a la Ciudadanía" width="250" height="42">
+</header>
+<main class="tarjeta" id="tarjeta" data-url="https://facusomadrid-wq.github.io/tarjetas/iker-gonzalez-gonzalez/" data-titulo="Iker González González · FAC-USO Madrid">
+  <h1 class="nombre">Iker González González</h1>
+  <p class="cargo">Secretario General FAC-USO Madrid</p>
+  <p class="organizacion">FAC-USO Madrid</p>
+  <ul class="contacto">
+    <li><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg><span class="dato"><span class="etiqueta">Teléfono</span> <a href="tel:+34646927813">+34 646 927 813</a></span></li>
+    <li><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg><span class="dato"><span class="etiqueta">Correo</span> <a href="mailto:iker.gonzalez@facuso.com">iker.gonzalez@facuso.com</a></span></li>
+  </ul>
+  <div class="acciones">
+    <a class="boton boton-principal" href="contacto.vcf" download="iker-gonzalez-gonzalez.vcf" type="text/vcard"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg><span>Guardar contacto</span></a>
+    <a class="boton" href="tel:+34646927813"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg><span>Llamar</span></a>
+    <a class="boton" href="mailto:iker.gonzalez@facuso.com"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg><span>Correo</span></a>
+    <button class="boton" type="button" id="boton-compartir"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartir</span></button>
+    <button class="boton" type="button" id="boton-qr" aria-haspopup="dialog" aria-controls="qr-pantalla"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 20h2M20 14v2"/></svg><span>Mostrar QR</span></button>
+  </div>
+  <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
+  <div class="copiar" id="copiar" hidden>
+    <label for="campo-enlace">Enlace de la tarjeta (cópialo a mano)</label>
+    <input id="campo-enlace" type="text" readonly value="https://facusomadrid-wq.github.io/tarjetas/iker-gonzalez-gonzalez/">
+  </div>
+</main>
+<footer class="pie">Tarjeta emitida por FAC-USO Madrid</footer>
+</div>
+<div class="qr-pantalla" id="qr-pantalla" role="dialog" aria-modal="true" aria-labelledby="qr-titulo" hidden>
+  <h2 id="qr-titulo">Escanea para abrir la tarjeta</h2>
+  <img class="qr-imagen" src="qr.svg" alt="Código QR con el enlace a la tarjeta de Iker González González" width="296" height="296">
+  <p class="qr-url">https://facusomadrid-wq.github.io/tarjetas/iker-gonzalez-gonzalez/</p>
+  <button class="boton" type="button" id="boton-cerrar-qr"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Cerrar</span></button>
+</div>
+</body>
+</html>
