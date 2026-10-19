@@ -29,7 +29,7 @@ Cada tarjeta ofrece: **Guardar contacto** (vCard), **Llamar**, **Correo**, **Com
 | `plantilla/vendor/` | Librería QR `qrcode-generator` (MIT, Kazuhiko Arase) y su licencia. |
 | `herramientas/` | `emitir.js`, `retirar.js`, `ejemplo.js` (no se publican). |
 | `tests/` | Pruebas unitarias y de navegador (no se publican). |
-| `.github/workflows/pages.yml` | Publicación con GitHub Actions. |
+| `.github/workflows/pages.yml` | Publicación con GitHub Actions en la rama `gh-pages`. |
 
 ## Emitir una tarjeta
 
@@ -107,8 +107,9 @@ GitHub Pages.
 
 El workflow `.github/workflows/pages.yml` (al hacer push a `main`) pasa las pruebas unitarias y
 publica **solo** la raíz, `recursos/` y las carpetas de tarjeta. Nunca publica `herramientas/`,
-`tests/`, `plantilla/`, `node_modules/` ni la documentación. En el repositorio hay que activar
-*Settings → Pages → Source: GitHub Actions*.
+`tests/`, `plantilla/`, `node_modules/` ni la documentación. El resultado se guarda en la rama
+`gh-pages` (la genera el workflow; no se edita a mano). En el repositorio: *Settings → Pages →
+Source: Deploy from a branch → `gh-pages` / `(root)`*.
 
 ## Licencias
 

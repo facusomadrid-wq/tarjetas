@@ -1,4 +1,5 @@
-# Publica el sitio estático en GitHub Pages.
+# Publica el sitio estático en GitHub Pages a través de la rama gh-pages
+# (Settings → Pages → Deploy from a branch → gh-pages / (root)).
 # Solo se publican: index.html, 404.html, robots.txt, .nojekyll, recursos/ y las carpetas de tarjeta
 # (las que contienen sw.js y contacto.vcf). Nunca herramientas/, tests/, plantilla/, node_modules/ ni documentación.
 name: Publicar tarjetas en GitHub Pages
@@ -9,9 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
@@ -49,21 +48,15 @@ jobs:
           echo "Contenido publicado:"
           find _site -type f | sort
 
-      - name: Configurar Pages
-        uses: actions/configure-pages@v5
-
-      - name: Subir el sitio
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-
-  publicar:
-    needs: construir
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.despliegue.outputs.page_url }}
-    steps:
-      - name: Publicar en GitHub Pages
-        id: despliegue
-        uses: actions/deploy-pages@v4
+      - name: Publicar en la rama gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd _site
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Publicación del sitio desde ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
