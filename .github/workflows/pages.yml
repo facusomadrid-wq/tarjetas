@@ -1,0 +1,69 @@
+# Publica el sitio estático en GitHub Pages.
+# Solo se publican: index.html, 404.html, robots.txt, .nojekyll, recursos/ y las carpetas de tarjeta
+# (las que contienen sw.js y contacto.vcf). Nunca herramientas/, tests/, plantilla/, node_modules/ ni documentación.
+name: Publicar tarjetas en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Pruebas de la plantilla
+        run: node --test 'tests/unidad/*.test.js'
+
+      - name: Preparar la carpeta del sitio
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp index.html 404.html robots.txt .nojekyll _site/
+          cp -R recursos _site/recursos
+          for carpeta in */; do
+            carpeta="${carpeta%/}"
+            case "$carpeta" in
+              herramientas|tests|plantilla|node_modules|recursos|docs|_site) continue ;;
+            esac
+            if [ -f "$carpeta/sw.js" ] && [ -f "$carpeta/contacto.vcf" ] && [ -f "$carpeta/index.html" ]; then
+              mkdir -p "_site/$carpeta"
+              cp "$carpeta/index.html" "$carpeta/contacto.vcf" "$carpeta/manifest.webmanifest" \
+                 "$carpeta/sw.js" "$carpeta/qr.svg" "_site/$carpeta/"
+            fi
+          done
+          echo "Contenido publicado:"
+          find _site -type f | sort
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir el sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  publicar:
+    needs: construir
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - name: Publicar en GitHub Pages
+        id: despliegue
+        uses: actions/deploy-pages@v4
