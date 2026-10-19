@@ -1,0 +1,297 @@
+/*
+ * Estilos compartidos de las tarjetas de visita de FAC-USO Madrid.
+ * Mobile first, modo claro y oscuro, sin recursos externos (fuentes del sistema).
+ * Colores corporativos: rojo USO #E71615 y verde FAC #00A94E.
+ */
+
+:root {
+  --rojo-uso: #E71615;
+  --verde-fac: #00A94E;
+  --fondo: #f3f4f6;
+  --superficie: #ffffff;
+  --texto: #1a1a1a;
+  --texto-suave: #4b5056;
+  --borde: #c9ccd1;
+  --enlace: #1a1a1a;
+  --foco: #1a56db;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #121212;
+    --superficie: #1e1e1e;
+    --texto: #f2f2f2;
+    --texto-suave: #b0b4ba;
+    --borde: #4a4d52;
+    --enlace: #f2f2f2;
+    --foco: #8ab4f8;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* Cabecera con el logo oficial y el filete rojo de 3 px */
+.cabecera {
+  background: var(--superficie);
+  border-bottom: 3px solid var(--rojo-uso);
+  padding: 14px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  display: block;
+  width: 250px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Cuerpo de la tarjeta */
+.tarjeta {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 28px 16px 24px;
+}
+
+.nombre {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.cargo {
+  margin: 6px 0 0;
+  font-size: 1.125rem;
+  color: var(--texto);
+}
+
+.organizacion {
+  margin: 10px 0 0;
+  padding-left: 10px;
+  border-left: 4px solid var(--verde-fac);
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.contacto {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--borde);
+}
+
+.contacto li {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.etiqueta {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+}
+
+.contacto a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--enlace);
+  font-size: 1.0625rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Botones: objetivos táctiles de al menos 44 px, siempre con texto además del icono */
+.acciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  min-width: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.boton:hover {
+  border-color: var(--texto-suave);
+}
+
+.boton:active {
+  transform: translateY(1px);
+}
+
+.boton-principal {
+  grid-column: 1 / -1;
+  background: var(--rojo-uso);
+  border-color: var(--rojo-uso);
+  color: #ffffff;
+}
+
+.boton-principal:hover {
+  border-color: #ffffff;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.icono {
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+.aviso {
+  min-height: 1.5em;
+  margin: 14px 0 0;
+  font-weight: 600;
+}
+
+.copiar {
+  margin-top: 8px;
+}
+
+.copiar label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+  margin-bottom: 4px;
+}
+
+.copiar input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
+
+/* QR a pantalla completa */
+.qr-pantalla {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 16px;
+  background: var(--fondo);
+  text-align: center;
+  overflow-y: auto;
+}
+
+.qr-pantalla h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.qr-imagen {
+  display: block;
+  width: min(80vw, 360px);
+  height: auto;
+  padding: 12px;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+.qr-url {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+  max-width: 100%;
+}
+
+.qr-pantalla .boton {
+  min-width: 160px;
+}
+
+/* Tarjeta retirada y página neutra */
+.retirada p,
+.neutra p {
+  font-size: 1.0625rem;
+}
+
+.pie {
+  padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+  border-top: 1px solid var(--borde);
+  background: var(--superficie);
+}
+
+@media (min-width: 600px) {
+  .tarjeta {
+    margin-top: 32px;
+    margin-bottom: 32px;
+    padding: 32px 28px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boton:active {
+    transform: none;
+  }
+}
