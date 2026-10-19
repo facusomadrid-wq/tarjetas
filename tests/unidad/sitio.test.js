@@ -46,11 +46,19 @@ test('repositorio: no existe ningún índice ni JSON con la lista de personas', 
   assert.deepEqual(encontrados, ['package.json']);
 });
 
-test('repositorio: la única tarjeta es la de ejemplo y coincide con la plantilla', () => {
+// Las tarjetas reales las publica el panel de Apps script (Fase 2) en commits a main: esta prueba
+// corre en el workflow antes de publicar, así que admite otras carpetas de tarjeta además del ejemplo.
+test('repositorio: las carpetas de tarjeta tienen solo los 5 archivos generados y el ejemplo coincide con la plantilla', () => {
   const tarjetas = fs.readdirSync(RAIZ_REPO, { withFileTypes: true })
     .filter((e) => e.isDirectory() && fs.existsSync(path.join(RAIZ_REPO, e.name, 'sw.js')))
     .map((e) => e.name);
-  assert.deepEqual(tarjetas, ['ejemplo']);
+  assert.ok(tarjetas.includes('ejemplo'), 'falta la tarjeta de ejemplo');
+  const esperados = ['contacto.vcf', 'index.html', 'manifest.webmanifest', 'qr.svg', 'sw.js'];
+  for (const slug of tarjetas) {
+    assert.ok(plantilla.slugValido(slug), `carpeta de tarjeta con nombre no válido: ${slug}`);
+    assert.deepEqual(fs.readdirSync(path.join(RAIZ_REPO, slug)).sort(), esperados, `${slug}/: archivos inesperados`);
+    assert.ok(leer(path.join(slug, 'sw.js')).startsWith('/* Service worker de la tarjeta «' + slug + '»'), `${slug}/sw.js no es de la plantilla`);
+  }
   const esperado = plantilla.generarTarjeta(DATOS_EJEMPLO, { versionRecursos: versionRecursos() });
   for (const [nombre, contenido] of Object.entries(esperado)) {
     assert.equal(leer(path.join('ejemplo', nombre)), contenido, `ejemplo/${nombre} desactualizado: ejecuta «npm run ejemplo»`);
