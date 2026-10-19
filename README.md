@@ -11,7 +11,7 @@ https://facusomadrid-wq.github.io/tarjetas/<slug>/
   nombre de la organización. Una tarjeta solo existe si el administrador la genera y la publica en este
   repositorio.
 - **Aspecto profesional**: logo oficial, colores corporativos (rojo USO `#E71615`, verde FAC `#00A94E`),
-  modo claro y oscuro, pensado primero para móvil (Android e iPhone).
+  siempre en claro (aspecto de tarjeta física, también con el móvil en modo oscuro), pensado primero para móvil (Android e iPhone).
 - **Funciona sin conexión** y se puede instalar en la pantalla de inicio.
 
 Cada tarjeta ofrece: **Guardar contacto** (vCard), **Llamar**, **Correo**, **Compartir** y
@@ -22,7 +22,7 @@ Cada tarjeta ofrece: **Guardar contacto** (vCard), **Llamar**, **Correo**, **Com
 | Ruta | Qué es |
 |---|---|
 | `index.html`, `404.html`, `robots.txt`, `.nojekyll` | Raíz neutra del sitio (sin listado de tarjetas). |
-| `recursos/` | Archivos compartidos: estilos, script, logo oficial (color y blanco) e iconos. |
+| `recursos/` | Archivos compartidos: estilos, script, logo oficial a color e iconos. |
 | `<slug>/` | Una tarjeta: `index.html`, `contacto.vcf`, `manifest.webmanifest`, `sw.js`, `qr.svg`. |
 | `ejemplo/` | Única tarjeta incluida, **totalmente ficticia** («Nombre Ejemplo»). |
 | `plantilla/tarjeta.js` | Plantilla pura `generarTarjeta(datos, opciones)` (sin APIs de Node; reutilizable desde Apps Script). |
@@ -95,7 +95,7 @@ borra su copia, se da de baja y muestra «Esta tarjeta ya no está vigente».
 
 ```bash
 npm test                 # node:test: validación, escapado/inyección, slug, vCard, generación, herramientas
-npm run test:navegador   # Playwright + Chromium (390 px, claro/oscuro, 44 px, sin conexión, retirada)
+npm run test:navegador   # Playwright + Chromium (390 px, sistema en claro/oscuro, contraste AA, 44 px, sin conexión, retirada)
 ```
 
 `test:navegador` no instala nada: usa un Playwright ya disponible (`NODE_PATH`) y el Chromium de

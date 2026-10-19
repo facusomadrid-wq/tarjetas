@@ -32,7 +32,6 @@ var RECURSOS_COMPARTIDOS = [
   '../recursos/tarjeta.css',
   '../recursos/tarjeta.js',
   '../recursos/logo-color.png',
-  '../recursos/logo-blanco.png',
   '../recursos/icono-192.png',
   '../recursos/icono-512.png'
 ];
@@ -363,10 +362,7 @@ function icono_(nombre) {
 
 function cabeceraHtml_() {
   return '<header class="cabecera">\n' +
-    '  <picture>\n' +
-    '    <source media="(prefers-color-scheme: dark)" srcset="../recursos/logo-blanco.png">\n' +
-    '    <img class="logo" src="../recursos/logo-color.png" alt="FAC-USO Madrid · Federación de Atención a la Ciudadanía" width="250" height="42">\n' +
-    '  </picture>\n' +
+    '  <img class="logo" src="../recursos/logo-color.png" alt="FAC-USO Madrid · Federación de Atención a la Ciudadanía" width="250" height="42">\n' +
     '</header>\n';
 }
 
@@ -377,9 +373,8 @@ function cabezaHtml_(titulo, conManifiesto) {
     '<meta http-equiv="Content-Security-Policy" content="' + CSP + '">\n' +
     '<meta name="robots" content="noindex,nofollow">\n' +
     '<meta name="referrer" content="no-referrer">\n' +
-    '<meta name="color-scheme" content="light dark">\n' +
-    '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">\n' +
-    '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121212">\n' +
+    '<meta name="color-scheme" content="light">\n' +
+    '<meta name="theme-color" content="#f3f4f6">\n' +
     '<title>' + escaparHtml(titulo) + '</title>\n' +
     (conManifiesto ? '<link rel="manifest" href="manifest.webmanifest">\n' : '') +
     '<link rel="icon" type="image/png" href="../recursos/icono-192.png">\n' +
@@ -396,10 +391,10 @@ function generarIndexHtml_(d) {
   var datosContacto = '';
   var botones = '';
   if (d.telefono) {
-    datosContacto += '    <li><span class="etiqueta">Teléfono</span> <a href="tel:' + e(d.telefono.e164) + '">' + e(d.telefono.visible) + '</a></li>\n';
+    datosContacto += '    <li>' + icono_('llamar') + '<span class="dato"><span class="etiqueta">Teléfono</span> <a href="tel:' + e(d.telefono.e164) + '">' + e(d.telefono.visible) + '</a></span></li>\n';
   }
   if (d.correo) {
-    datosContacto += '    <li><span class="etiqueta">Correo</span> <a href="mailto:' + e(d.correo) + '">' + e(d.correo) + '</a></li>\n';
+    datosContacto += '    <li>' + icono_('correo') + '<span class="dato"><span class="etiqueta">Correo</span> <a href="mailto:' + e(d.correo) + '">' + e(d.correo) + '</a></span></li>\n';
   }
   botones += '    <a class="boton boton-principal" href="contacto.vcf" download="' + e(d.slug) + '.vcf" type="text/vcard">' + icono_('guardar') + '<span>Guardar contacto</span></a>\n';
   if (d.telefono) botones += '    <a class="boton" href="tel:' + e(d.telefono.e164) + '">' + icono_('llamar') + '<span>Llamar</span></a>\n';
@@ -410,6 +405,7 @@ function generarIndexHtml_(d) {
   return cabezaHtml_(d.nombre + ' · ' + d.organizacion, true) +
     '<script src="../recursos/tarjeta.js" defer></script>\n' +
     '</head>\n<body>\n' +
+    '<div class="recuadro">\n' +
     cabeceraHtml_() +
     '<main class="tarjeta" id="tarjeta" data-url="' + e(d.url) + '" data-titulo="' + e(d.nombre + ' · ' + d.organizacion) + '">\n' +
     '  <h1 class="nombre">' + e(d.nombre) + '</h1>\n' +
@@ -423,13 +419,14 @@ function generarIndexHtml_(d) {
     '    <input id="campo-enlace" type="text" readonly value="' + e(d.url) + '">\n' +
     '  </div>\n' +
     '</main>\n' +
+    '<footer class="pie">Tarjeta emitida por ' + e(d.organizacion) + '</footer>\n' +
+    '</div>\n' +
     '<div class="qr-pantalla" id="qr-pantalla" role="dialog" aria-modal="true" aria-labelledby="qr-titulo" hidden>\n' +
     '  <h2 id="qr-titulo">Escanea para abrir la tarjeta</h2>\n' +
     '  <img class="qr-imagen" src="qr.svg" alt="Código QR con el enlace a la tarjeta de ' + e(d.nombre) + '" width="296" height="296">\n' +
     '  <p class="qr-url">' + e(d.url) + '</p>\n' +
     '  <button class="boton" type="button" id="boton-cerrar-qr">' + icono_('cerrar') + '<span>Cerrar</span></button>\n' +
     '</div>\n' +
-    '<footer class="pie">Tarjeta emitida por ' + e(d.organizacion) + '</footer>\n' +
     '</body>\n</html>\n';
 }
 
@@ -437,12 +434,14 @@ function generarIndexHtml_(d) {
 function generarPaginaRetirada_() {
   return cabezaHtml_('Tarjeta no vigente · ' + ORGANIZACION, false) +
     '</head>\n<body>\n' +
+    '<div class="recuadro">\n' +
     cabeceraHtml_() +
     '<main class="tarjeta retirada">\n' +
     '  <h1 class="nombre"><span aria-hidden="true">⊘ </span>Esta tarjeta ya no está vigente</h1>\n' +
     '  <p>La organización la ha retirado. Si necesitas el contacto, pide un enlace actualizado a quien te la dio.</p>\n' +
     '</main>\n' +
     '<footer class="pie">' + escaparHtml(ORGANIZACION) + '</footer>\n' +
+    '</div>\n' +
     '</body>\n</html>\n';
 }
 
@@ -458,8 +457,8 @@ function generarManifest_(d) {
     start_url: './',
     scope: './',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#ffffff',
+    background_color: '#f3f4f6',
+    theme_color: '#f3f4f6',
     icons: [
       { src: '../recursos/icono-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
       { src: '../recursos/icono-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' }

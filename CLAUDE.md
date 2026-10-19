@@ -21,8 +21,9 @@
   y plegado a 75 octetos.
 - Páginas sin recursos externos, con CSP en `<meta>`, `noindex,nofollow`, sin analíticas, sin `innerHTML`
   con datos, sin scripts ni estilos en línea (excepto `404.html`, con hash en la CSP).
-- Logo oficial en `recursos/` (blanco en oscuro, color en claro). Nunca recolorear. Filete rojo #E71615 de 3 px.
-- Objetivos táctiles ≥ 44 px, modo claro y oscuro, el color nunca es el único indicador.
+- Logo oficial a color en `recursos/` (siempre el de color). Nunca recolorear. Filete rojo #E71615 de 3 px.
+- Tarjeta siempre en claro (aprobado por el propietario), también con el sistema en oscuro: sin `prefers-color-scheme: dark`.
+- Objetivos táctiles ≥ 44 px, contraste AA, el color nunca es el único indicador.
 - Cada tarjeta tiene su manifest y su service worker (alcance en su carpeta). Si la página da 404 con
   conexión, el SW borra su caché, se desregistra y muestra «Esta tarjeta ya no está vigente».
 - Si cambias `recursos/`, ejecuta `npm run ejemplo` (la prueba de coherencia del ejemplo lo exige).
@@ -37,6 +38,6 @@
 
 ## Pruebas
 - `npm test` (node:test) para la lógica pura y las herramientas. Toda función nueva necesita prueba.
-- `npm run test:navegador` (Playwright, 390 px, claro/oscuro, sin conexión, retirada). No ejecutar
+- `npm run test:navegador` (Playwright, 390 px, sistema en claro/oscuro, sin conexión, retirada). No ejecutar
   `playwright install`.
 - No afirmar que algo está probado si no se ha ejecutado la prueba.

@@ -1,7 +1,7 @@
 /* Service worker de la tarjeta «ejemplo» de FAC-USO Madrid. Generado: no editar a mano. */
 'use strict';
 var SLUG = "ejemplo";
-var VERSION = "1bc72392";
+var VERSION = "b62a059f";
 var ARCHIVOS = [
   "./",
   "./contacto.vcf",
@@ -10,11 +10,10 @@ var ARCHIVOS = [
   "../recursos/tarjeta.css",
   "../recursos/tarjeta.js",
   "../recursos/logo-color.png",
-  "../recursos/logo-blanco.png",
   "../recursos/icono-192.png",
   "../recursos/icono-512.png"
 ];
-var PAGINA_RETIRADA = "<!doctype html>\n<html lang=\"es\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; manifest-src 'self'; connect-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'\">\n<meta name=\"robots\" content=\"noindex,nofollow\">\n<meta name=\"referrer\" content=\"no-referrer\">\n<meta name=\"color-scheme\" content=\"light dark\">\n<meta name=\"theme-color\" media=\"(prefers-color-scheme: light)\" content=\"#ffffff\">\n<meta name=\"theme-color\" media=\"(prefers-color-scheme: dark)\" content=\"#121212\">\n<title>Tarjeta no vigente · FAC-USO Madrid</title>\n<link rel=\"icon\" type=\"image/png\" href=\"../recursos/icono-192.png\">\n<link rel=\"apple-touch-icon\" href=\"../recursos/icono-192.png\">\n<link rel=\"stylesheet\" href=\"../recursos/tarjeta.css\">\n</head>\n<body>\n<header class=\"cabecera\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"../recursos/logo-blanco.png\">\n    <img class=\"logo\" src=\"../recursos/logo-color.png\" alt=\"FAC-USO Madrid · Federación de Atención a la Ciudadanía\" width=\"250\" height=\"42\">\n  </picture>\n</header>\n<main class=\"tarjeta retirada\">\n  <h1 class=\"nombre\"><span aria-hidden=\"true\">⊘ </span>Esta tarjeta ya no está vigente</h1>\n  <p>La organización la ha retirado. Si necesitas el contacto, pide un enlace actualizado a quien te la dio.</p>\n</main>\n<footer class=\"pie\">FAC-USO Madrid</footer>\n</body>\n</html>\n";
+var PAGINA_RETIRADA = "<!doctype html>\n<html lang=\"es\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; manifest-src 'self'; connect-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'\">\n<meta name=\"robots\" content=\"noindex,nofollow\">\n<meta name=\"referrer\" content=\"no-referrer\">\n<meta name=\"color-scheme\" content=\"light\">\n<meta name=\"theme-color\" content=\"#f3f4f6\">\n<title>Tarjeta no vigente · FAC-USO Madrid</title>\n<link rel=\"icon\" type=\"image/png\" href=\"../recursos/icono-192.png\">\n<link rel=\"apple-touch-icon\" href=\"../recursos/icono-192.png\">\n<link rel=\"stylesheet\" href=\"../recursos/tarjeta.css\">\n</head>\n<body>\n<div class=\"recuadro\">\n<header class=\"cabecera\">\n  <img class=\"logo\" src=\"../recursos/logo-color.png\" alt=\"FAC-USO Madrid · Federación de Atención a la Ciudadanía\" width=\"250\" height=\"42\">\n</header>\n<main class=\"tarjeta retirada\">\n  <h1 class=\"nombre\"><span aria-hidden=\"true\">⊘ </span>Esta tarjeta ya no está vigente</h1>\n  <p>La organización la ha retirado. Si necesitas el contacto, pide un enlace actualizado a quien te la dio.</p>\n</main>\n<footer class=\"pie\">FAC-USO Madrid</footer>\n</div>\n</body>\n</html>\n";
   /* eslint-disable no-undef */
   var PREFIJO = 'tarjeta-' + SLUG + '-';
   var CACHE = PREFIJO + VERSION;

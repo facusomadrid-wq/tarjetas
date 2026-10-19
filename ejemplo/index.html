@@ -6,9 +6,8 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; manifest-src 'self'; connect-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121212">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f3f4f6">
 <title>Nombre Ejemplo · FAC-USO Madrid</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="../recursos/icono-192.png">
@@ -17,19 +16,17 @@
 <script src="../recursos/tarjeta.js" defer></script>
 </head>
 <body>
+<div class="recuadro">
 <header class="cabecera">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="../recursos/logo-blanco.png">
-    <img class="logo" src="../recursos/logo-color.png" alt="FAC-USO Madrid · Federación de Atención a la Ciudadanía" width="250" height="42">
-  </picture>
+  <img class="logo" src="../recursos/logo-color.png" alt="FAC-USO Madrid · Federación de Atención a la Ciudadanía" width="250" height="42">
 </header>
 <main class="tarjeta" id="tarjeta" data-url="https://facusomadrid-wq.github.io/tarjetas/ejemplo/" data-titulo="Nombre Ejemplo · FAC-USO Madrid">
   <h1 class="nombre">Nombre Ejemplo</h1>
   <p class="cargo">Delegado sindical</p>
   <p class="organizacion">FAC-USO Madrid</p>
   <ul class="contacto">
-    <li><span class="etiqueta">Teléfono</span> <a href="tel:+34600000000">+34 600 000 000</a></li>
-    <li><span class="etiqueta">Correo</span> <a href="mailto:ejemplo@example.org">ejemplo@example.org</a></li>
+    <li><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg><span class="dato"><span class="etiqueta">Teléfono</span> <a href="tel:+34600000000">+34 600 000 000</a></span></li>
+    <li><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg><span class="dato"><span class="etiqueta">Correo</span> <a href="mailto:ejemplo@example.org">ejemplo@example.org</a></span></li>
   </ul>
   <div class="acciones">
     <a class="boton boton-principal" href="contacto.vcf" download="ejemplo.vcf" type="text/vcard"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg><span>Guardar contacto</span></a>
@@ -44,12 +41,13 @@
     <input id="campo-enlace" type="text" readonly value="https://facusomadrid-wq.github.io/tarjetas/ejemplo/">
   </div>
 </main>
+<footer class="pie">Tarjeta emitida por FAC-USO Madrid</footer>
+</div>
 <div class="qr-pantalla" id="qr-pantalla" role="dialog" aria-modal="true" aria-labelledby="qr-titulo" hidden>
   <h2 id="qr-titulo">Escanea para abrir la tarjeta</h2>
   <img class="qr-imagen" src="qr.svg" alt="Código QR con el enlace a la tarjeta de Nombre Ejemplo" width="296" height="296">
   <p class="qr-url">https://facusomadrid-wq.github.io/tarjetas/ejemplo/</p>
   <button class="boton" type="button" id="boton-cerrar-qr"><svg class="icono" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Cerrar</span></button>
 </div>
-<footer class="pie">Tarjeta emitida por FAC-USO Madrid</footer>
 </body>
 </html>

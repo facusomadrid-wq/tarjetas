@@ -9,8 +9,9 @@
  *
  *   npm run test:navegador
  *
- * Qué comprueba: 390 px en claro y oscuro, objetivos táctiles ≥ 44 px, sin scroll horizontal,
- * sin errores de consola, logo correcto por modo, filete rojo, QR a pantalla completa,
+ * Qué comprueba: 390 px con el sistema en claro y en oscuro (la tarjeta debe verse SIEMPRE clara y
+ * con el logo a color), contraste AA de los textos, objetivos táctiles ≥ 44 px, sin scroll horizontal,
+ * sin errores de consola, filete rojo, QR a pantalla completa,
  * compartir (alternativa de copiar enlace), descarga del .vcf, funcionamiento sin conexión
  * (con el servidor apagado) y retirada (404 → «Esta tarjeta ya no está vigente»).
  */
@@ -101,7 +102,8 @@ async function comprobarDiseno(pagina, etiqueta) {
       filete: cabecera.borderBottomWidth + ' ' + cabecera.borderBottomStyle + ' ' + cabecera.borderBottomColor,
       logo: logo.currentSrc,
       logoCargado: logo.complete && logo.naturalWidth > 0,
-      fondo: getComputedStyle(document.body).backgroundColor
+      fondo: getComputedStyle(document.body).backgroundColor,
+      esquema: getComputedStyle(document.documentElement).colorScheme
     };
   });
   comprobar(medidas.scrollAncho <= medidas.anchoVisible, `${etiqueta}: sin scroll horizontal`, medidas);
@@ -109,7 +111,43 @@ async function comprobarDiseno(pagina, etiqueta) {
   comprobar(medidas.sinTexto === 0, `${etiqueta}: todos los botones tienen texto (no solo icono/color)`);
   comprobar(medidas.filete === '3px solid rgb(231, 22, 21)', `${etiqueta}: filete rojo de 3 px en la cabecera`, medidas.filete);
   comprobar(medidas.logoCargado, `${etiqueta}: logo cargado`);
+  comprobar(medidas.logo.endsWith('/recursos/logo-color.png'), `${etiqueta}: logo siempre a color`, medidas.logo);
+  comprobar(medidas.fondo === 'rgb(243, 244, 246)', `${etiqueta}: fondo de página gris claro`, medidas.fondo);
+  comprobar(medidas.esquema === 'light', `${etiqueta}: color-scheme light`, medidas.esquema);
   return medidas;
+}
+
+/** Contraste WCAG de cada texto visible con el fondo opaco más cercano (≥ 4,5:1). */
+async function comprobarContraste(pagina, etiqueta, selector) {
+  const resultado = await pagina.evaluate((sel) => {
+    const rgb = (c) => (c.match(/[\d.]+/g) || []).map(Number);
+    const lum = ([r, g, b]) => [r, g, b].map((v) => v / 255)
+      .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+      .reduce((t, v, i) => t + v * [0.2126, 0.7152, 0.0722][i], 0);
+    const fondoDe = (el) => {
+      for (let e = el; e; e = e.parentElement) {
+        const c = rgb(getComputedStyle(e).backgroundColor);
+        if (c.length === 3 || c[3] === 1) return c.slice(0, 3);
+      }
+      return rgb(getComputedStyle(document.documentElement).backgroundColor).slice(0, 3);
+    };
+    const malos = [];
+    let revisados = 0;
+    for (const el of document.querySelectorAll(sel)) {
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 && r.height === 0) continue;
+      const tieneTexto = [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+      if (!tieneTexto) continue;
+      revisados++;
+      const l1 = lum(rgb(getComputedStyle(el).color));
+      const l2 = lum(fondoDe(el));
+      const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      if (ratio < 4.5) malos.push({ texto: el.textContent.trim().slice(0, 40), ratio: Math.round(ratio * 100) / 100 });
+    }
+    return { revisados, malos };
+  }, selector);
+  comprobar(resultado.revisados > 0 && resultado.malos.length === 0,
+    `${etiqueta}: contraste AA en ${resultado.revisados} textos`, resultado.malos);
 }
 
 async function main() {
@@ -147,9 +185,28 @@ async function main() {
       comprobar((await pagina.textContent('.pie')).trim() === 'Tarjeta emitida por FAC-USO Madrid', `${nombre}: pie correcto`);
       const robots = await pagina.getAttribute('meta[name="robots"]', 'content');
       comprobar(robots === 'noindex,nofollow', `${nombre}: noindex,nofollow`);
-      const medidas = await comprobarDiseno(pagina, nombre);
-      const logoEsperado = esquema === 'dark' ? 'logo-blanco.png' : 'logo-color.png';
-      comprobar(medidas.logo.endsWith(logoEsperado), `${nombre}: usa ${logoEsperado}`, medidas.logo);
+      await comprobarDiseno(pagina, nombre);
+      const aspecto = await pagina.evaluate(() => {
+        const recuadro = getComputedStyle(document.querySelector('.recuadro'));
+        const nombre = getComputedStyle(document.querySelector('.nombre'));
+        const principal = getComputedStyle(document.querySelector('.boton-principal'));
+        return {
+          recuadro: recuadro.backgroundColor,
+          ancho: document.querySelector('.recuadro').getBoundingClientRect().width,
+          radio: recuadro.borderTopLeftRadius,
+          sombra: recuadro.boxShadow !== 'none',
+          nombre: nombre.color,
+          principal: principal.backgroundColor + ' / ' + principal.color,
+          pieDentro: !!document.querySelector('.recuadro .pie')
+        };
+      });
+      comprobar(aspecto.recuadro === 'rgb(255, 255, 255)' && aspecto.radio !== '0px' && aspecto.sombra,
+        `${nombre}: recuadro blanco con esquinas redondeadas y sombra`, aspecto);
+      comprobar(aspecto.ancho <= 440, `${nombre}: recuadro de 440 px como máximo`, aspecto.ancho);
+      comprobar(aspecto.nombre === 'rgb(31, 35, 40)', `${nombre}: nombre en gris muy oscuro`, aspecto.nombre);
+      comprobar(aspecto.principal === 'rgb(231, 22, 21) / rgb(255, 255, 255)', `${nombre}: Guardar contacto en rojo con texto blanco`, aspecto.principal);
+      comprobar(aspecto.pieDentro, `${nombre}: pie dentro del recuadro`);
+      await comprobarContraste(pagina, nombre, '.recuadro *');
       await pagina.screenshot({ path: path.join(CAPTURAS, `tarjeta-${nombre}.png`), fullPage: true });
 
       // Mostrar QR a pantalla completa
@@ -167,6 +224,9 @@ async function main() {
       comprobar(qr.visible && qr.ancho === ANCHO && qr.alto === ALTO, `${nombre}: QR a pantalla completa`, qr);
       comprobar(qr.imagen, `${nombre}: la imagen del QR carga`);
       comprobar(qr.foco === 'boton-cerrar-qr', `${nombre}: el foco va al botón Cerrar`);
+      const fondoQr = await pagina.evaluate(() => getComputedStyle(document.getElementById('qr-pantalla')).backgroundColor);
+      comprobar(fondoQr === 'rgb(255, 255, 255)', `${nombre}: pantalla del QR con fondo blanco`, fondoQr);
+      await comprobarContraste(pagina, `${nombre} (QR)`, '#qr-pantalla *');
       await comprobarDiseno(pagina, `${nombre} (QR abierto)`);
       await pagina.screenshot({ path: path.join(CAPTURAS, `qr-${nombre}.png`) });
       await pagina.keyboard.press('Escape');
@@ -204,7 +264,7 @@ async function main() {
     // ---------------------------------------------------------------- raíz y 404
     console.log('\n# Raíz del sitio y página 404');
     {
-      const contexto = await navegador.newContext({ viewport: { width: ANCHO, height: ALTO }, deviceScaleFactor: 2, isMobile: true });
+      const contexto = await navegador.newContext({ viewport: { width: ANCHO, height: ALTO }, deviceScaleFactor: 2, isMobile: true, colorScheme: 'dark' });
       const pagina = await contexto.newPage();
       const errores = [];
       vigilarConsola(pagina, errores);
@@ -218,6 +278,8 @@ async function main() {
       const r404 = await pagina.goto(base + 'no-existe/');
       comprobar(r404.status() === 404, '404: estado 404');
       comprobar((await pagina.textContent('h1')).includes('Página no encontrada'), '404: texto neutro');
+      const fondo404 = await pagina.evaluate(() => getComputedStyle(document.body).backgroundColor);
+      comprobar(fondo404 === 'rgb(243, 244, 246)', '404: clara también con el sistema en oscuro', fondo404);
       await pagina.screenshot({ path: path.join(CAPTURAS, 'pagina-404.png') });
       const robots = await (await pagina.goto(base + 'robots.txt')).text();
       comprobar(robots.includes('Disallow: /'), 'robots.txt: Disallow: /');

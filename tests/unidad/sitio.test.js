@@ -65,7 +65,7 @@ test('ejemplo: datos totalmente ficticios', () => {
 });
 
 test('recursos: logos oficiales sin modificar y sin dependencias externas en CSS/JS', () => {
-  for (const archivo of ['logo-color.png', 'logo-blanco.png', 'icono-192.png', 'icono-512.png']) {
+  for (const archivo of ['logo-color.png', 'icono-192.png', 'icono-512.png']) {
     const b = fs.readFileSync(path.join(RAIZ_REPO, 'recursos', archivo));
     assert.equal(b.subarray(1, 4).toString(), 'PNG');
   }
@@ -76,6 +76,49 @@ test('recursos: logos oficiales sin modificar y sin dependencias externas en CSS
   assert.ok(css.includes('#E71615') && css.includes('#00A94E'));
   assert.ok(css.includes('border-bottom: 3px solid var(--rojo-uso)'));
   assert.ok(!js.includes('innerHTML'));
+});
+
+test('siempre en claro: sin reglas de modo oscuro en CSS, raíz ni 404', () => {
+  const css = leer('recursos/tarjeta.css');
+  assert.ok(!/prefers-color-scheme/.test(css), 'tarjeta.css sin prefers-color-scheme');
+  assert.ok(/color-scheme:\s*light;/.test(css));
+  for (const archivo of ['index.html', '404.html']) {
+    const html = leer(archivo);
+    assert.ok(!/prefers-color-scheme/.test(html), `${archivo} sin prefers-color-scheme`);
+    assert.ok(html.includes('<meta name="color-scheme" content="light">'), `${archivo} declara color-scheme light`);
+    assert.ok(!html.includes('logo-blanco'), `${archivo} sin logo blanco`);
+  }
+  assert.ok(!fs.existsSync(path.join(RAIZ_REPO, 'recursos', 'logo-blanco.png')));
+});
+
+/** Contraste WCAG entre dos colores #rrggbb. */
+function contraste(a, b) {
+  const lum = (hex) => {
+    const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+      .map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  };
+  const [l1, l2] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (l1 + 0.05) / (l2 + 0.05);
+}
+
+test('contraste AA (≥ 4,5:1) de los colores de texto del diseño', () => {
+  const css = leer('recursos/tarjeta.css');
+  const variable = (n) => new RegExp(`--${n}:\\s*(#[0-9a-fA-F]{6});`).exec(css)[1];
+  const blanco = '#ffffff';
+  const pares = {
+    'nombre sobre blanco': [variable('texto'), blanco],
+    'cargo (verde) sobre blanco': [variable('verde-texto'), blanco],
+    'texto suave sobre blanco': [variable('texto-suave'), blanco],
+    'texto suave sobre el pie': [variable('texto-suave'), '#fafafa'],
+    'texto sobre el fondo de página': [variable('texto'), variable('fondo')],
+    'botón principal (blanco sobre rojo)': [blanco, variable('rojo-uso')]
+  };
+  for (const [nombre, [texto, fondo]] of Object.entries(pares)) {
+    assert.ok(contraste(texto, fondo) >= 4.5, `${nombre}: ${contraste(texto, fondo).toFixed(2)}`);
+  }
+  // El verde FAC puro no llega a AA como texto: por eso el cargo usa --verde-texto.
+  assert.ok(contraste('#00A94E', blanco) < 4.5);
 });
 
 test('librería QR: copiada con su licencia MIT', () => {

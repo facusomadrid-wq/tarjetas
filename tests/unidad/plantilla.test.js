@@ -208,7 +208,11 @@ test('página: CSP, noindex, sin recursos externos, botones y pie', () => {
   assert.ok(html.includes('href="contacto.vcf" download="nombre-ejemplo.vcf"'));
   assert.ok(html.includes('href="tel:+34600000000"'));
   assert.ok(html.includes('href="mailto:ejemplo@example.org"'));
-  assert.ok(html.includes('srcset="../recursos/logo-blanco.png"'));
+  assert.ok(!html.includes('logo-blanco'), 'el logo es siempre el de color');
+  assert.ok(!/prefers-color-scheme/.test(html), 'sin variantes de modo oscuro');
+  assert.ok(html.includes('<meta name="color-scheme" content="light">'));
+  assert.ok(html.includes('<meta name="theme-color" content="#f3f4f6">'));
+  assert.ok(html.includes('<div class="recuadro">'));
   assert.ok(html.includes('src="../recursos/logo-color.png"'));
   assert.ok(html.includes('<link rel="manifest" href="manifest.webmanifest">'));
 });
