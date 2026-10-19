@@ -1,0 +1,20 @@
+# Dependencias
+node_modules/
+
+# Secretos y configuración local
+.env
+*.env
+.clasprc.json
+.clasp*.json
+
+# Datos de personas: los JSON de entrada viven FUERA del repositorio.
+# Por seguridad se ignora cualquier .json salvo los de configuración del proyecto y las plantillas.
+*.json
+!package.json
+!package-lock.json
+!plantilla/**/*.json
+
+# Resultados de pruebas y capturas
+test-results/
+capturas/
+*.log

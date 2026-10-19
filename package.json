@@ -1,0 +1,17 @@
+{
+  "name": "tarjetas-facuso-madrid",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tarjetas de visita digitales de FAC-USO Madrid (sitio estático para GitHub Pages).",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test \"tests/unidad/*.test.js\"",
+    "test:navegador": "node tests/navegador/e2e.js",
+    "emitir": "node herramientas/emitir.js",
+    "retirar": "node herramientas/retirar.js",
+    "ejemplo": "node herramientas/ejemplo.js"
+  }
+}
