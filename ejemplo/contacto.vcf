@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Ejemplo;Nombre;;;
+FN:Nombre Ejemplo
+ORG:FAC-USO Madrid
+TITLE:Delegado sindical
+TEL;TYPE=WORK,VOICE:+34600000000
+EMAIL;TYPE=INTERNET,WORK:ejemplo@example.org
+URL:https://facusomadrid-wq.github.io/tarjetas/ejemplo/
+END:VCARD
