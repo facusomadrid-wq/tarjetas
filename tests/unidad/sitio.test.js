@@ -129,6 +129,14 @@ test('contraste AA (≥ 4,5:1) de los colores de texto del diseño', () => {
   assert.ok(contraste('#00A94E', blanco) < 4.5);
 });
 
+test('workflows: toda acción de GitHub fijada por SHA de commit con su versión en un comentario (WEB-1)', () => {
+  const dir = path.join(RAIZ_REPO, '.github', 'workflows');
+  const usos = fs.readdirSync(dir).filter((f) => /\.ya?ml$/.test(f))
+    .flatMap((f) => fs.readFileSync(path.join(dir, f), 'utf8').split('\n').filter((l) => /^\s*(-\s*)?uses:/.test(l)).map((l) => f + ': ' + l.trim()));
+  assert.ok(usos.length >= 1);
+  for (const u of usos) assert.match(u, /uses: [\w.-]+\/[\w.-]+@[0-9a-f]{40} # v\d+(\.\d+)*$/, u);
+});
+
 test('librería QR: copiada con su licencia MIT', () => {
   assert.ok(leer('plantilla/vendor/qrcode.js').includes('Licensed under the MIT license'));
   assert.ok(leer('plantilla/vendor/LICENSE-qrcode-generator.txt').includes('Copyright (c) 2009 Kazuhiko Arase'));

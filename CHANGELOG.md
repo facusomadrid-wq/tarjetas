@@ -2,6 +2,18 @@
 
 Formato basado en «Keep a Changelog». Fechas en AAAA-MM-DD.
 
+## [0.2.1] - 2026-11-24 — Workflow de Pages fijado por SHA (WEB-1)
+
+En la rama de trabajo, sin publicar: se publica al fusionar en `main` (el workflow reconstruye `gh-pages`). Las tarjetas
+no cambian. **Vuelta atrás:** revertir el commit.
+
+### Seguridad
+- `.github/workflows/pages.yml`: `actions/checkout` fijada por el SHA del commit de la etiqueta `v4`
+  (`11d5960a326750d5838078e36cf38b85af677262`, v4.4.0) en vez de por la etiqueta, como en el resto de apps (SC-03).
+  Es el único workflow que publica algo de cara al público.
+- Prueba nueva: toda acción `uses:` de los workflows va fijada por un SHA de 40 cifras con su versión en un comentario.
+- `package.json` pasa a 0.2.1 (decía 0.1.0 aunque el CHANGELOG ya iba por la 0.2.0).
+
 ## [0.2.0] - 2026-10-19 — Rediseño claro
 
 ### Cambiado
