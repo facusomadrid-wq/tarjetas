@@ -2,10 +2,11 @@
 /*
  * Pruebas en navegador (Chromium con Playwright) de la tarjeta de ejemplo.
  *
- * Requisitos (no se instala nada desde aquí; no se ejecuta «playwright install»):
- *   NODE_PATH=<carpeta con node_modules/playwright>   (por defecto, la del entorno de pruebas)
- *   PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers          (Chromium ya instalado)
- *   CAPTURAS=<carpeta donde guardar las capturas>      (opcional)
+ * Requisitos (no se instala nada desde aquí; no se ejecuta «playwright install»). Cada uno tiene su
+ * valor por defecto y se cambia con su variable de entorno (WEB-2):
+ *   NODE_PATH=<carpeta que contiene «playwright»>     (por defecto, el Playwright global: /opt/node22/lib/node_modules)
+ *   PLAYWRIGHT_BROWSERS_PATH=<carpeta de navegadores>  (por defecto, /opt/pw-browsers: Chromium ya instalado)
+ *   CAPTURAS=<carpeta donde guardar las capturas>      (por defecto, tests/navegador/capturas/, ignorada por git)
  *
  *   npm run test:navegador
  *
@@ -22,14 +23,14 @@ const path = require('node:path');
 const Module = require('node:module');
 const { crearServidor } = require('./servidor.js');
 
-const ENTORNO_PRUEBAS = '/tmp/claude-0/-home-user/f5c89f95-9428-5653-b1b0-cd6853f3ef0f/scratchpad';
-if (!process.env.NODE_PATH) process.env.NODE_PATH = path.join(ENTORNO_PRUEBAS, 'ui', 'node_modules');
+const PLAYWRIGHT_GLOBAL = '/opt/node22/lib/node_modules';
+if (!process.env.NODE_PATH) process.env.NODE_PATH = PLAYWRIGHT_GLOBAL;
 Module._initPaths();
 if (!process.env.PLAYWRIGHT_BROWSERS_PATH) process.env.PLAYWRIGHT_BROWSERS_PATH = '/opt/pw-browsers';
 const { chromium } = require('playwright');
 
 const RAIZ_REPO = path.resolve(__dirname, '..', '..');
-const CAPTURAS = process.env.CAPTURAS || path.join(ENTORNO_PRUEBAS, 'tarjetas-capturas');
+const CAPTURAS = process.env.CAPTURAS || path.join(__dirname, 'capturas');
 const ANCHO = 390;
 const ALTO = 844;
 

@@ -2,6 +2,19 @@
 
 Formato basado en «Keep a Changelog». Fechas en AAAA-MM-DD.
 
+## Sin publicar (solo pruebas)
+
+No cambia el sitio: nada de lo que se publica en GitHub Pages (páginas, `recursos/`, tarjetas) ni la plantilla. Sin versión nueva.
+
+### Pruebas
+- **WEB-2 · la prueba de navegador ya no apunta a una carpeta borrada** (2026-11-26). `tests/navegador/e2e.js` buscaba
+  Playwright (y dejaba las capturas) en la carpeta temporal de una sesión antigua que ya no existe: sin la variable
+  `NODE_PATH` fallaba con «Cannot find module 'playwright'». Ahora usa por defecto el Playwright global del equipo
+  (`/opt/node22/lib/node_modules`) y las capturas van a `tests/navegador/capturas/` (ignorada por git; el workflow nunca
+  publica `tests/`). Las dos cosas se siguen pudiendo cambiar con `NODE_PATH` y `CAPTURAS`. Solo cambia la cabecera de la
+  prueba; `package.json` ya iba por la 0.2.1 (la otra mitad de WEB-2, hecha el 24/11).
+  Medido sin ninguna variable de entorno: `npm test` 44/44 y `npm run test:navegador` 106/106 comprobaciones (6 s).
+
 ## [0.2.1] - 2026-11-24 — Workflow de Pages fijado por SHA (WEB-1)
 
 En la rama de trabajo, sin publicar: se publica al fusionar en `main` (el workflow reconstruye `gh-pages`). Las tarjetas
